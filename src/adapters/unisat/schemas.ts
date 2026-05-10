@@ -312,7 +312,7 @@ export const UnisatInscriptionInfoSchema = z
     inscriptionNumber: z.number().int(),
     collectionId: z.string(),
     collectionName: z.string(),
-    collectionItemName: z.string().nullable(),
+    collectionItemName: z.string().nullable().optional(),
     contentType: z.string(),
     contentBody: z.string(),
     nftType: z.string(),
