@@ -551,9 +551,7 @@ export class UnisatAdapter implements VenueAdapter {
         }
         if (parsed.data.list.length < PAGE) break; // reached end
       }
-      throw new Error(
-        `UnisatAdapter.getCollectionStats: collection '${collection_id}' not found in Unisat directory`,
-      );
+      throw new UnisatCollectionNotFoundError(collection_id);
     } catch (err) {
       this.rethrowOrDegrade(err);
     }
@@ -619,6 +617,27 @@ export class UnisatAdapterUnavailableError extends Error {
     if (options?.cause !== undefined) {
       (this as { cause?: unknown }).cause = options.cause;
     }
+  }
+}
+
+/**
+ * Thrown by getCollectionStats when the requested collection_id is not present
+ * in Unisat's directory. Distinct from UnisatAdapterUnavailableError because
+ * this is a semantic 404, not a transient operational failure — the upstream
+ * is healthy, the caller asked for a thing that doesn't exist. The API
+ * endpoint layer maps this to HTTP 404.
+ *
+ * For tail-of-distribution collections that aren't in the directory but DO
+ * have listings, callers can fall back to synthesizing a Collection from
+ * listListings results (per the index.ts comment on getCollectionStats).
+ */
+export class UnisatCollectionNotFoundError extends Error {
+  readonly collection_id: string;
+
+  constructor(collection_id: string) {
+    super(`UnisatAdapter.getCollectionStats: collection '${collection_id}' not found in Unisat directory`);
+    this.name = 'UnisatCollectionNotFoundError';
+    this.collection_id = collection_id;
   }
 }
 
