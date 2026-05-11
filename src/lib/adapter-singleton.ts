@@ -23,7 +23,7 @@
  *     read env directly.
  */
 
-import { UnisatAdapter } from '@/adapters/unisat/index.js';
+import { UnisatAdapter } from '@/adapters/unisat/index';
 
 let _unisat: UnisatAdapter | undefined;
 

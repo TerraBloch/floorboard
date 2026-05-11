@@ -12,8 +12,15 @@
  * adapter's health() docstring notes the same concern.
  */
 
-import { getUnisatAdapter } from '@/lib/adapter-singleton.js';
-import { errorJson } from '@/lib/response.js';
+import { getUnisatAdapter } from '@/lib/adapter-singleton';
+import { errorJson } from '@/lib/response';
+
+/**
+ * Always re-invoke on every request. The static-optimization detector
+ * would otherwise prerender this route at build time because GET() takes
+ * no Request — but a health probe must reflect live upstream state.
+ */
+export const dynamic = 'force-dynamic';
 
 export async function GET(): Promise<Response> {
   try {

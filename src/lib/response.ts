@@ -32,13 +32,13 @@
  * write one parser for all responses and let source_status drive UI states.
  */
 
-import { ZodError, type ZodSchema } from 'zod';
+import { ZodError, type ZodTypeAny, type z } from 'zod';
 
 import {
   UnisatAdapterUnavailableError,
   UnisatCollectionNotFoundError,
-} from '@/adapters/unisat/index.js';
-import type { Source, SourcedResult, SourceStatus } from '@/types/index.js';
+} from '@/adapters/unisat/index';
+import type { Source, SourcedResult, SourceStatus } from '@/types/index';
 
 // ─── Success envelopes ────────────────────────────────────────────────────
 
@@ -140,13 +140,18 @@ export function handleError<T>(
  * Parse a Request's search params with a Zod schema. Throws ZodError on
  * failure; handleError translates that to HTTP 400.
  *
+ * The generic is `S extends ZodTypeAny` (not `ZodSchema<T>`) so schemas
+ * with differing input/output types — e.g. comma-separated lists parsed
+ * via .transform().pipe() — work. Return type is `z.output<S>`, i.e. the
+ * post-transform shape.
+ *
  * Why Object.fromEntries instead of URLSearchParams direct iteration:
  * Zod sees the params as a record, can apply default values, and reports
  * missing required fields with a clean path. Repeated keys (?a=1&a=2)
  * collapse to the last value — fine for V1; if we ever need real array
  * params we'll switch to `getAll()` per field.
  */
-export function parseQuery<T>(request: Request, schema: ZodSchema<T>): T {
+export function parseQuery<S extends ZodTypeAny>(request: Request, schema: S): z.output<S> {
   const url = new URL(request.url);
   const raw = Object.fromEntries(url.searchParams.entries());
   return schema.parse(raw);

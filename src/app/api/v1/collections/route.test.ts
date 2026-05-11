@@ -15,7 +15,7 @@ import {
   makeMockFetch,
   makeRequest,
   resetAdapter,
-} from '@/lib/test-helpers.js';
+} from '@/lib/test-helpers';
 import { GET } from './route.js';
 
 import collectionStatListFixture from '@/adapters/unisat/__fixtures__/collection_statistic_list.json' with { type: 'json' };

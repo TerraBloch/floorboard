@@ -16,9 +16,9 @@
 
 import { z } from 'zod';
 
-import { getUnisatAdapter } from '@/lib/adapter-singleton.js';
-import { handleError, nowIso, parseQuery, sourcedJson } from '@/lib/response.js';
-import type { Collection, Page } from '@/types/index.js';
+import { getUnisatAdapter } from '@/lib/adapter-singleton';
+import { handleError, nowIso, parseQuery, sourcedJson } from '@/lib/response';
+import type { Collection, Page } from '@/types/index';
 
 const QuerySchema = z.object({
   sort: z
@@ -29,6 +29,13 @@ const QuerySchema = z.object({
 });
 
 const EMPTY_PAGE: Page<Collection> = { items: [], next_cursor: null, has_more: false };
+
+/**
+ * Force dynamic. Belt-and-suspenders — Next currently detects this route
+ * as dynamic because we read URL params, but if a future refactor moves
+ * to a no-arg GET we don't want to silently re-enable static caching.
+ */
+export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request): Promise<Response> {
   const fetched_at = nowIso();

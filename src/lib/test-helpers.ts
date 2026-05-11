@@ -12,8 +12,8 @@
  * of (Request, { params }).
  */
 
-import { UnisatAdapter } from '@/adapters/unisat/index.js';
-import { __setUnisatAdapterForTests } from '@/lib/adapter-singleton.js';
+import { UnisatAdapter } from '@/adapters/unisat/index';
+import { __setUnisatAdapterForTests } from '@/lib/adapter-singleton';
 
 export const FIXED_NOW = '2026-05-10T20:00:00.000Z';
 

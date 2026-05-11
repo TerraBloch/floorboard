@@ -19,8 +19,8 @@
 
 import { z } from 'zod';
 
-import { getUnisatAdapter } from '@/lib/adapter-singleton.js';
-import { handleError, nowIso, sourcedJson } from '@/lib/response.js';
+import { getUnisatAdapter } from '@/lib/adapter-singleton';
+import { handleError, nowIso, sourcedJson } from '@/lib/response';
 
 const SlugSchema = z
   .string()
@@ -31,6 +31,8 @@ const SlugSchema = z
 interface RouteContext {
   params: { slug: string };
 }
+
+export const dynamic = 'force-dynamic';
 
 export async function GET(_request: Request, ctx: RouteContext): Promise<Response> {
   const fetched_at = nowIso();

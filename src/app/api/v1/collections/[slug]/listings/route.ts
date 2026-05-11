@@ -24,9 +24,9 @@
 
 import { z } from 'zod';
 
-import { getUnisatAdapter } from '@/lib/adapter-singleton.js';
-import { handleError, nowIso, parseQuery, sourcedJson } from '@/lib/response.js';
-import type { Listing, Page } from '@/types/index.js';
+import { getUnisatAdapter } from '@/lib/adapter-singleton';
+import { handleError, nowIso, parseQuery, sourcedJson } from '@/lib/response';
+import type { Listing, Page } from '@/types/index';
 
 const SlugSchema = z
   .string()
@@ -45,6 +45,8 @@ const EMPTY_PAGE: Page<Listing> = { items: [], next_cursor: null, has_more: fals
 interface RouteContext {
   params: { slug: string };
 }
+
+export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request, ctx: RouteContext): Promise<Response> {
   const fetched_at = nowIso();
