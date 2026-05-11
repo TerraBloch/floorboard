@@ -20,7 +20,9 @@ gives each operator their own budget, their own keys, their own uptime
 expectations, and removes any single point of contention with upstreams.
 
 The project is open source so that running your own copy is the easy path,
-not the hard one.
+not the hard one. Floorboard is maintained on a best-effort basis and is
+designed so operators can run their own copy without depending on a central
+hosted service.
 
 ## Status
 
